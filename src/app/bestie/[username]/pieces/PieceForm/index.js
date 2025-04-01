@@ -2,6 +2,11 @@
 
 import { useCallback, useState } from "react"
 import UnitSelection from "./UnitSelection"
+import VariationsData from "./VariationsData"
+
+const variationTemplate = {
+    quantity: 1
+}
 
 export const ErrorLabel = ({children, error}) => {
     return(
@@ -102,8 +107,9 @@ export const PieceForm = () => {
         unit: '',
     })
 
-    
+    const [variationsData, setVariationsData] = useState([{...variationTemplate}])
 
+    
     return(
         <form>
             <fieldset>
@@ -139,16 +145,8 @@ export const PieceForm = () => {
                     }
                 </div>
             </fieldset>
-            <div>
-                <div>
-                    <fieldset>
-                        <ErrorLabel>
-                            <span>Starting Quantity</span>
-                            <StateObjInput type="number" name="quantity" />
-                        </ErrorLabel>
-                    </fieldset>
-                </div>
-            </div>
+
+            <VariationsData template={variationTemplate} setData={variationsData} setVariationsData={setVariationsData}/>
             {/* <fieldset>
                 <legend>Ingredients</legend>
                 <div>
