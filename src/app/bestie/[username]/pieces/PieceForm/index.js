@@ -134,9 +134,7 @@ export const PieceForm = () => {
                     </fieldset>
                 </div>
                 <div>
-                    {
-                        <UnitSelection unitValue={partData} setUnitValue={setPartData}/>
-                    }
+                    <UnitSelection unitValue={partData} setUnitValue={setPartData}/>
                 </div>
             </fieldset>
             <div>
