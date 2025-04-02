@@ -1,19 +1,23 @@
+import { simpleKey } from "@/utils"
 import VariationForm from "./VariationForm"
 
-const VariationsData = (template, data, setData) => {
+const VariationsData = (isTemplate, template, data, setData) => {
 
     const addVariation = () => {
         setData(prev => {
             return [ 
                 ...prev,
-                {...template}
+                {
+                    key: simpleKey(),
+                    ...template
+                }
             ]
         })
     }
 
     return(
         <fieldset>
-            <legend>Does this piece vary?</legend>
+            {isTemplate && <legend>variations</legend>}
             {
                 data?.map?.((v, index) => {
                     return <VariationForm key={v.key} i={index} data={v} setData={setData}/>

@@ -106,10 +106,9 @@ export const PieceForm = () => {
         virtual: '0',
         unit: '',
     })
-
+    const [varaitionParameters, setVariationParameters] = useState([])
     const [variationsData, setVariationsData] = useState([{...variationTemplate}])
 
-    
     return(
         <form>
             <fieldset>
@@ -143,8 +142,25 @@ export const PieceForm = () => {
                     <UnitSelection unitValue={partData} setUnitValue={setPartData}/>
                 </div>
             </fieldset>
-
-            <VariationsData template={variationTemplate} setData={variationsData} setVariationsData={setVariationsData}/>
+            <fieldset>
+                <legend>Does this piece vary?</legend>
+                <ErrorLabel>
+                    <span>no</span>
+                    <StateObjRadio name="is_template" value="0" stateVal={partData} setValue={setPartData}/>
+                </ErrorLabel>
+                <ErrorLabel>
+                    <span>yes</span>
+                    <StateObjRadio name="is_template" value="1" stateVal={partData} setValue={setPartData}/>
+                </ErrorLabel>
+            </fieldset>
+            <VaraitionParameters />
+            <VariationsData 
+                isTemplate={partData.is_template === "1"} 
+                template={variationTemplate} 
+                setData={variationsData} 
+                setVariationsData={setVariationsData}
+            />
+            <Ingredients data={data} setData={setData} />
             {/* <fieldset>
                 <legend>Ingredients</legend>
                 <div>
