@@ -1,4 +1,4 @@
-const VariationForm = ({i, data, setData}) => {
+const VariationForm = ({i, data, setData, variationParameters}) => {
 
     const didMount = useRef(false);
 

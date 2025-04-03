@@ -1,11 +1,30 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import UnitSelection from "./UnitSelection"
 import VariationsData from "./VariationsData"
+import VariationParameters from "./VariationParameters"
 
-const variationTemplate = {
-    quantity: 1
+export const LiveSearchBar = ({value, setValue, onSubmit}) => {
+
+    const onChange = useCallback(e => setValue(e.target.value), [])
+
+    const mountedRef = useRef(false)
+    const timeoutRef = useRef(null)
+
+    useEffect(() => {
+        if(!mountedRef.current) mountedRef.current === true
+
+        if(timeoutRef.current !== null) clearTimeout(timeoutRef.current)
+        
+        timeoutRef.current = setTimeout(onSubmit, 2000)
+    }, [value])
+
+    return (
+        <>
+            <input type="text" name="search" value={value} onChange={onChange} />
+        </>
+    )
 }
 
 export const ErrorLabel = ({children, error}) => {
@@ -19,17 +38,17 @@ export const ErrorLabel = ({children, error}) => {
     )
 }
 
-const StateInput = ({type, name, value, setValue}) => {
+export const StateInput = ({type = 'text', name, value, setValue, ...props}) => {
 
     const onChange = useCallback(e => {
         const {value} = e.target
         setValue(value)
-    })
+    }, [])
 
-    return <input type={type} name={name} value={value} onChange={onChange}/>
+    return <input type={type} name={name} value={value} onChange={onChange} {...props}/>
 }
 
-const StateObjInput = ({type, name, valueObj, setValue}) => {
+const StateObjInput = ({type, name, valueObj, setValue, ...props}) => {
     const onChange = useCallback(e => {
         const {name, value} = e.target
         setValue( prev => {
@@ -38,9 +57,9 @@ const StateObjInput = ({type, name, valueObj, setValue}) => {
                 [name]: value
             }
         })
-    })
+    }, [])
 
-    return <input type={type} name={name} value={valueObj[name]} onChange={onChange}/>
+    return <input type={type} name={name} value={valueObj[name]} onChange={onChange} {...props}/>
 }
 
 export const StateSelect = ({children, name, value, setValue}) => {
@@ -48,7 +67,7 @@ export const StateSelect = ({children, name, value, setValue}) => {
     const onChange = useCallback(e => {
         const {value} = e.target
         setValue(value)
-    })
+    }, [])
 
     return(
         <select name={name} value={value} onChange={onChange}>
@@ -65,7 +84,7 @@ export const StateObjSelect = ({children, name, valueObj, setValue}) => {
                 [name]: value
             }
         })
-    })
+    }, [])
 
     return (
         <select type={type} name={name} value={valueObj[name]} onChange={onChange}>
@@ -78,7 +97,7 @@ export const StateRadio = ({name, value, stateVal, setValue}) => {
     const onChange = useCallback(e => {
         const {value} = e.target
         setValue(value)
-    })
+    }, [])
 
     return <input type="radio" name={name} value={value} checked={stateVal === value} onChange={onChange}/>
 }
@@ -93,7 +112,7 @@ export const StateObjRadio = ({name, value, stateVal, setValue}) => {
                 [name]: value
             }
         })
-    })
+    }, [])
 
     return <input type="radio" name={name} value={valueObj[name]} checked={value[name] === stateVal} onChange={onChange}/>
 }
@@ -105,8 +124,13 @@ export const PieceForm = () => {
         description: '',
         virtual: '0',
         unit: '',
+        parameters: {}
     })
-    const [varaitionParameters, setVariationParameters] = useState([])
+    const [variationTemplate, setVariationTemplate] = useState({
+        quantity: 1,
+        parameters: {}
+    })
+    const [variationParameters, setVariationParameters] = useState({})
     const [variationsData, setVariationsData] = useState([{...variationTemplate}])
 
     return(
@@ -143,7 +167,7 @@ export const PieceForm = () => {
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Does this piece vary?</legend>
+                <legend>Does this piece have variations?</legend>
                 <ErrorLabel>
                     <span>no</span>
                     <StateObjRadio name="is_template" value="0" stateVal={partData} setValue={setPartData}/>
@@ -153,12 +177,13 @@ export const PieceForm = () => {
                     <StateObjRadio name="is_template" value="1" stateVal={partData} setValue={setPartData}/>
                 </ErrorLabel>
             </fieldset>
-            <VaraitionParameters />
+            <VariationParameters selectedParams={VariationParameters} setSelectedParams={setVariationParameters} legendText={'Variation properties'}/>
             <VariationsData 
                 isTemplate={partData.is_template === "1"} 
-                template={variationTemplate} 
-                setData={variationsData} 
+                template={variationTemplate}
+                setData={variationsData}
                 setVariationsData={setVariationsData}
+                variationParameters={variationParameters}
             />
             <Ingredients data={data} setData={setData} />
             {/* <fieldset>
