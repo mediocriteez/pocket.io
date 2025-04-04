@@ -1,3 +1,5 @@
+import ParameterFields from "../../ParameterFields";
+
 const VariationForm = ({i, data, setData, variationParameters}) => {
 
     const didMount = useRef(false);
@@ -28,6 +30,7 @@ const VariationForm = ({i, data, setData, variationParameters}) => {
     return(
         <fieldset>
             <legend></legend>
+            <ParameterFields parameters={variationParameters} setData={setFormData} />
             <ErrorLabel>
                 <span>Starting Quantity</span>
                 <StateObjInput type="number" name="quantity" data={formData} setData={setFormData}/>

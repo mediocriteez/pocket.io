@@ -38,6 +38,31 @@ export const ErrorLabel = ({children, error}) => {
     )
 }
 
+export const StateBinaryCheckbox = (({ name, value, setValue, ...props }) => {
+
+    const onChange = useCallback(e => {
+        const {checked} = e.target
+        setValue(checked)
+    }, [])
+
+    return <input type="checkbox" name={name} value={value} onChange={onChange} {...props} />
+})
+
+export const StateObjBinaryCheckbox = (({ name, value, setValue, ...props }) => {
+
+    const onChange = useCallback(e => {
+        const {name, checked} = e.target
+        setValue( prev => {
+            return{
+                ...prev,
+                [name]: checked
+            }
+        })
+    }, [])
+
+    return <input type="checkbox" name={name} value={value} onChange={onChange} {...props} />
+})
+
 export const StateInput = ({type = 'text', name, value, setValue, ...props}) => {
 
     const onChange = useCallback(e => {
@@ -48,7 +73,7 @@ export const StateInput = ({type = 'text', name, value, setValue, ...props}) => 
     return <input type={type} name={name} value={value} onChange={onChange} {...props}/>
 }
 
-const StateObjInput = ({type, name, valueObj, setValue, ...props}) => {
+export const StateObjInput = ({type, name, valueObj, setValue, ...props}) => {
     const onChange = useCallback(e => {
         const {name, value} = e.target
         setValue( prev => {
