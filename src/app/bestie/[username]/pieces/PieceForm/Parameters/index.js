@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react"
 import { ErrorLabel, LiveSearchBar, StateInput } from ".."
 
-const VariationParameters = ({selectedParams, setSelectedParams, legendText}) => {
+const Parameters = ({selectedParams, setSelectedParams, legendText}) => {
 
     const [searchString, setSearchString] = useState('')
     const [allParams, setAllParams] = useState({1: {name: 'Color'}, 2: {name: 'Size'}})
@@ -84,4 +84,4 @@ const VariationParameters = ({selectedParams, setSelectedParams, legendText}) =>
     )
 }
 
-export default VariationParameters
+export default Parameters

@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import UnitSelection from "./UnitSelection"
 import VariationsData from "./VariationsData"
-import VariationParameters from "./VariationParameters"
+import Parameters from "./Parameters"
+import ParameterFields from "./ParameterFields"
 
 export const LiveSearchBar = ({value, setValue, onSubmit}) => {
 
@@ -151,6 +152,8 @@ export const PieceForm = () => {
         unit: '',
         parameters: {}
     })
+    const [partParameters, setPartParameters] = useState({})
+
     const [variationTemplate, setVariationTemplate] = useState({
         quantity: 1,
         parameters: {}
@@ -161,48 +164,58 @@ export const PieceForm = () => {
     return(
         <form>
             <fieldset>
-                <div>
+
+                <ErrorLabel>
+                    <span>Name your piece</span>
+                    <StateObjInput type="text" name="name"/>
+                    <StateObjStateObjInput type="text" name="name" value={partData} setValue={setPartData}/>
+                </ErrorLabel>
+
+                <ErrorLabel>
+                    <span>Describe your piece</span>
+                    <textarea name="description"></textarea>
+                </ErrorLabel>
+
+                <Parameters selectedParams={partParameters} setSelectedParams={setPartParameters} legendText={'Add properties'}/>
+                <ParameterFields parameters={partParameters} setData={setPartData} />
+
+                <fieldset>
+
+                    <legend>Is this piece digital?</legend>
+
                     <ErrorLabel>
-                        <span>Name your piece</span>
-                        <StateObjInput type="text" name="name"/>
-                        <StateObjStateObjInput type="text" name="name" value={partData} setValue={setPartData}/>
+                        <span>no</span>
+                        <StateObjRadio type="radio" name="digital" value="0" />
                     </ErrorLabel>
-                </div>
-                <div>
+
                     <ErrorLabel>
-                        <span>Describe your piece</span>
-                        <textarea name="description"></textarea>
+                        <span>yes</span>
+                        <StateObjRadio type="radio" name="digital" value="1" />
                     </ErrorLabel>
-                </div>
-                <div>
-                    <fieldset>
-                        <legend>Is this piece digital?</legend>
-                        <ErrorLabel>
-                            <span>no</span>
-                            <StateObjRadio type="radio" name="digital" value="0" />
-                        </ErrorLabel>
-                        <ErrorLabel>
-                            <span>yes</span>
-                            <StateObjRadio type="radio" name="digital" value="1" />
-                        </ErrorLabel>
-                    </fieldset>
-                </div>
-                <div>
-                    <UnitSelection unitValue={partData} setUnitValue={setPartData}/>
-                </div>
+
+                </fieldset>
+
+                <UnitSelection unitValue={partData} setUnitValue={setPartData}/>
+
             </fieldset>
             <fieldset>
+
                 <legend>Does this piece have variations?</legend>
+
                 <ErrorLabel>
                     <span>no</span>
                     <StateObjRadio name="is_template" value="0" stateVal={partData} setValue={setPartData}/>
                 </ErrorLabel>
+
                 <ErrorLabel>
                     <span>yes</span>
                     <StateObjRadio name="is_template" value="1" stateVal={partData} setValue={setPartData}/>
                 </ErrorLabel>
+
             </fieldset>
-            <VariationParameters selectedParams={VariationParameters} setSelectedParams={setVariationParameters} legendText={'Variation properties'}/>
+            {partData.is_template == 1 &&
+                <Parameters selectedParams={variationParameters} setSelectedParams={setVariationParameters} legendText={'Select the properties that vary'}/>
+            }
             <VariationsData 
                 isTemplate={partData.is_template === "1"} 
                 template={variationTemplate}
