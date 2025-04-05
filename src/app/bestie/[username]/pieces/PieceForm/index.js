@@ -6,24 +6,29 @@ import VariationsData from "./VariationsData"
 import Parameters from "./Parameters"
 import ParameterFields from "./ParameterFields"
 
-export const LiveSearchBar = ({value, setValue, onSubmit}) => {
+export const LiveSearchBar = ({onSubmit}) => {
 
-    const onChange = useCallback(e => setValue(e.target.value), [])
+    const [searchString, setSearchString] = useState('')
+
+    const onChange = useCallback(e => setSearchString(e.target.value), [])
 
     const mountedRef = useRef(false)
     const timeoutRef = useRef(null)
 
     useEffect(() => {
-        if(!mountedRef.current) mountedRef.current === true
+        if(!mountedRef.current){
+            mountedRef.current = true
+            return
+        }
 
         if(timeoutRef.current !== null) clearTimeout(timeoutRef.current)
         
-        timeoutRef.current = setTimeout(onSubmit, 2000)
-    }, [value])
+        timeoutRef.current = setTimeout(onSubmit, 2000, searchString)
+    }, [searchString])
 
     return (
         <>
-            <input type="text" name="search" value={value} onChange={onChange} />
+            <input type="text" name="search" value={searchString} onChange={onChange} />
         </>
     )
 }
@@ -161,6 +166,8 @@ export const PieceForm = () => {
     const [variationParameters, setVariationParameters] = useState({})
     const [variationsData, setVariationsData] = useState([{...variationTemplate}])
 
+    const [bomData, setBomData] = useState({})
+
     return(
         <form>
             <fieldset>
@@ -223,7 +230,7 @@ export const PieceForm = () => {
                 setVariationsData={setVariationsData}
                 variationParameters={variationParameters}
             />
-            <Ingredients data={data} setData={setData} />
+            <Ingredients data={bomData} setData={setBomData} />
             {/* <fieldset>
                 <legend>Ingredients</legend>
                 <div>

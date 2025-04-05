@@ -50,7 +50,7 @@ const Parameters = ({selectedParams, setSelectedParams, legendText}) => {
             <legend>{legendText}</legend>
             <label>
                 <span>Search properties</span>
-                <LiveSearchBar value={searchString} setValue={setSearchString} />
+                <LiveSearchBar onSubmit={() => console.log('search parameters')}/>
             </label>
             <fieldset>
                 <legend>All properties</legend>
