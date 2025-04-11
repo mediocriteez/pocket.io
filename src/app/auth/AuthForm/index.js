@@ -20,10 +20,12 @@ const AuthForm = ({endpoint}) => {
                 <span>Password</span>
                 <StateObjInput name="password" data={credentials} setData={setCredentials} />
             </label>
-            <label>
-                <span>Confirm password</span>
-                <StateObjInput name="confirmPassword" data={credentials} setData={setCredentials} />
-            </label>
+            {endpoint === 'signup' &&
+                <label>
+                    <span>Confirm password</span>
+                    <StateObjInput name="confirmPassword" data={credentials} setData={setCredentials} />
+                </label>
+            }
         </form>
     )
 }
